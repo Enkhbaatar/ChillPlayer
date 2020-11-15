@@ -17,7 +17,8 @@ import javax.inject.Inject
 
 
 class FirebaseMusicSource @Inject constructor(private val musicDatabase: MusicDatabase) {
-    private var mSongs = emptyList<MediaMetadataCompat>()
+
+    var mSongs = emptyList<MediaMetadataCompat>()
 
     suspend fun fetchMediaData() = withContext(Dispatchers.IO) {
         state = STATE_INITIALIZING
@@ -85,6 +86,9 @@ class FirebaseMusicSource @Inject constructor(private val musicDatabase: MusicDa
             true
         }
     }
+
+    fun isMusicSourceEmpty() : Boolean = mSongs.isEmpty()
+    fun isMusicSourceNotEmpty() : Boolean = mSongs.isNotEmpty()
 }
 
 enum class State {
