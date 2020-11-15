@@ -18,45 +18,45 @@ import javax.inject.Inject
 
 class FirebaseMusicSource @Inject constructor(private val musicDatabase: MusicDatabase) {
 
-    var mSongs = emptyList<MediaMetadataCompat>()
+    var songs = emptyList<MediaMetadataCompat>()
 
     suspend fun fetchMediaData() = withContext(Dispatchers.IO) {
         state = STATE_INITIALIZING
         val allSong = musicDatabase.getAllSongs()
-        mSongs = allSong.map { song ->
+        songs = allSong.map { song ->
             MediaMetadataCompat.Builder()
-                    .putString(METADATA_KEY_ARTIST, song.subtitle)
-                    .putString(METADATA_KEY_MEDIA_ID, song.mediaId)
-                    .putString(METADATA_KEY_TITLE, song.title)
-                    .putString(METADATA_KEY_DISPLAY_TITLE, song.title)
-                    .putString(METADATA_KEY_DISPLAY_ICON_URI, song.imageUrl)
-                    .putString(METADATA_KEY_MEDIA_URI, song.imageUrl)
-                    .putString(METADATA_KEY_ALBUM_ART_URI, song.imageUrl)
-                    .putString(METADATA_KEY_DISPLAY_SUBTITLE, song.subtitle)
-                    .putString(METADATA_KEY_DISPLAY_DESCRIPTION, song.subtitle)
-                    .build()
+                .putString(METADATA_KEY_ARTIST, song.subtitle)
+                .putString(METADATA_KEY_MEDIA_ID, song.mediaId)
+                .putString(METADATA_KEY_TITLE, song.title)
+                .putString(METADATA_KEY_DISPLAY_TITLE, song.title)
+                .putString(METADATA_KEY_DISPLAY_ICON_URI, song.imageUrl)
+                .putString(METADATA_KEY_MEDIA_URI, song.imageUrl)
+                .putString(METADATA_KEY_ALBUM_ART_URI, song.imageUrl)
+                .putString(METADATA_KEY_DISPLAY_SUBTITLE, song.subtitle)
+                .putString(METADATA_KEY_DISPLAY_DESCRIPTION, song.subtitle)
+                .build()
         }
         state = STATE_INITIALIZED
     }
 
     fun asMediaSource(dataSourceFactory: DefaultDataSourceFactory): ConcatenatingMediaSource {
         val concatenatingMediaSource = ConcatenatingMediaSource()
-        mSongs.forEach { song ->
+        songs.forEach { song ->
             val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(song.getString(METADATA_KEY_MEDIA_URI).toUri())
+                .createMediaSource(song.getString(METADATA_KEY_MEDIA_URI).toUri())
             concatenatingMediaSource.addMediaSource(mediaSource)
         }
         return concatenatingMediaSource
     }
 
-    fun asMediaItems() = mSongs.map { song ->
+    fun asMediaItems() = songs.map { song ->
         val desc = MediaDescriptionCompat.Builder()
-                .setMediaUri(song.getString(METADATA_KEY_MEDIA_URI).toUri())
-                .setTitle(song.description.title)
-                .setSubtitle(song.description.subtitle)
-                .setMediaId(song.description.mediaId)
-                .setIconUri(song.description.iconUri)
-                .build()
+            .setMediaUri(song.getString(METADATA_KEY_MEDIA_URI).toUri())
+            .setTitle(song.description.title)
+            .setSubtitle(song.description.subtitle)
+            .setMediaId(song.description.mediaId)
+            .setIconUri(song.description.iconUri)
+            .build()
 
         MediaBrowserCompat.MediaItem(desc, FLAG_PLAYABLE)
     }
@@ -87,8 +87,8 @@ class FirebaseMusicSource @Inject constructor(private val musicDatabase: MusicDa
         }
     }
 
-    fun isMusicSourceEmpty() : Boolean = mSongs.isEmpty()
-    fun isMusicSourceNotEmpty() : Boolean = mSongs.isNotEmpty()
+    fun isMusicSourceEmpty(): Boolean = songs.isEmpty()
+    fun isMusicSourceNotEmpty(): Boolean = songs.isNotEmpty()
 }
 
 enum class State {

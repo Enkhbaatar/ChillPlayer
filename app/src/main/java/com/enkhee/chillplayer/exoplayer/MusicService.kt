@@ -13,6 +13,7 @@ import com.enkhee.chillplayer.exoplayer.callbacks.MusicPlayerEventListener
 import com.enkhee.chillplayer.exoplayer.callbacks.MusicPlayerNotificationListener
 import com.enkhee.chillplayer.other.Constants.FIRST_SONG_INDEX
 import com.enkhee.chillplayer.other.Constants.MEDIA_ROOT_ID
+import com.enkhee.chillplayer.other.Constants.NETWORK_ERROR
 import com.enkhee.chillplayer.other.Constants.SONG_START_POSITION
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -79,9 +80,9 @@ class MusicService : MediaBrowserServiceCompat() {
 
     private fun initMusicNotificationManager() {
         mMusicNotificationManger = MusicNotificationManager(
-                this,
-                mMediaSession.sessionToken,
-                MusicPlayerNotificationListener(this)
+            this,
+            mMediaSession.sessionToken,
+            MusicPlayerNotificationListener(this)
         ) {
             curSongDuration = mExoPlayer.duration
         }
@@ -91,50 +92,52 @@ class MusicService : MediaBrowserServiceCompat() {
         return MusicPlaybackPreparer(mFirebaseMusicSource) {
             curPlayingSong = it
             preparePlayer(
-                    mFirebaseMusicSource.mSongs,
-                    it,
-                    true
+                mFirebaseMusicSource.songs,
+                it,
+                true
             )
         }
     }
 
     private fun preparePlayer(
-            songs: List<MediaMetadataCompat>,
-            itemToPlay: MediaMetadataCompat?,
-            playNow: Boolean
+        songs: List<MediaMetadataCompat>,
+        itemToPlay: MediaMetadataCompat?,
+        playNow: Boolean
     ) {
-        val currSongIndex = if (curPlayingSong == null) FIRST_SONG_INDEX else songs.indexOf(itemToPlay)
+        val currSongIndex =
+            if (curPlayingSong == null) FIRST_SONG_INDEX else songs.indexOf(itemToPlay)
         mExoPlayer.prepare(mFirebaseMusicSource.asMediaSource(mDataSourceFactory))
         mExoPlayer.seekTo(currSongIndex, SONG_START_POSITION)
         mExoPlayer.playWhenReady = playNow
     }
 
     override fun onGetRoot(
-            clientPackageName: String,
-            clientUid: Int,
-            rootHints: Bundle?
-    ): BrowserRoot?  = BrowserRoot(MEDIA_ROOT_ID, null)
+        clientPackageName: String,
+        clientUid: Int,
+        rootHints: Bundle?
+    ): BrowserRoot? = BrowserRoot(MEDIA_ROOT_ID, null)
 
     override fun onLoadChildren(
-            parentId: String,
-            result: Result<MutableList<MediaBrowserCompat.MediaItem>>
+        parentId: String,
+        result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
-        when(parentId) {
+        when (parentId) {
             MEDIA_ROOT_ID -> {
                 val resultsSent = mFirebaseMusicSource.whenReady { isInitialized ->
-                    if(isInitialized) {
+                    if (isInitialized) {
                         result.sendResult(mFirebaseMusicSource.asMediaItems().toMutableList())
-                        if(!isPlayerInitialized && mFirebaseMusicSource.isMusicSourceNotEmpty()) {
-                            val songs= mFirebaseMusicSource.mSongs
+                        if (!isPlayerInitialized && mFirebaseMusicSource.isMusicSourceNotEmpty()) {
+                            val songs = mFirebaseMusicSource.songs
                             preparePlayer(songs, songs[FIRST_SONG_INDEX], false)
                             isPlayerInitialized = true
                         }
                     } else {
+                        mMediaSession.sendSessionEvent(NETWORK_ERROR, null)
                         result.sendResult(null)
                     }
                 }
 
-                if(!resultsSent) {
+                if (!resultsSent) {
                     result.detach()
                 }
             }
@@ -155,7 +158,7 @@ class MusicService : MediaBrowserServiceCompat() {
 
     private inner class MusicQueueNavigator : TimelineQueueNavigator(mMediaSession) {
         override fun getMediaDescription(player: Player, windowIndex: Int): MediaDescriptionCompat {
-            return mFirebaseMusicSource.mSongs[windowIndex].description
+            return mFirebaseMusicSource.songs[windowIndex].description
         }
     }
 }
