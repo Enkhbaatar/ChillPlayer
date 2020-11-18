@@ -1,6 +1,7 @@
 package com.enkhee.chillplayer.di
 
 import android.content.Context
+import com.enkhee.chillplayer.data.remote.MusicDatabase
 import com.enkhee.chillplayer.exoplayer.MusicService
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -20,7 +21,7 @@ object ServiceModule {
 
     @ServiceScoped
     @Provides
-    fun provideMusicDatabase() = MusicService()
+    fun provideMusicDatabase() = MusicDatabase()
 
     @ServiceScoped
     @Provides

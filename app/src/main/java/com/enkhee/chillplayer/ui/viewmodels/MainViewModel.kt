@@ -18,11 +18,11 @@ class MainViewModel @ViewModelInject constructor(
     private val musicServiceConnection: MusicServiceConnection
 ) : ViewModel() {
     private val _mediaItems = MutableLiveData<Resource<List<Song>>>()
-    private val mediaItems: LiveData<Resource<List<Song>>> = _mediaItems
+    val mediaItems: LiveData<Resource<List<Song>>> = _mediaItems
 
     val isConnected = musicServiceConnection.isConnection
     val networkError = musicServiceConnection.networkError
-    val curPlayingSong = musicServiceConnection.curPlayingSong
+    private val curPlayingSong = musicServiceConnection.curPlayingSong
     private val playbackState = musicServiceConnection.playbackState
 
     init {
