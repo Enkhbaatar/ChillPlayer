@@ -30,7 +30,7 @@ class FirebaseMusicSource @Inject constructor(private val musicDatabase: MusicDa
                 .putString(METADATA_KEY_TITLE, song.title)
                 .putString(METADATA_KEY_DISPLAY_TITLE, song.title)
                 .putString(METADATA_KEY_DISPLAY_ICON_URI, song.imageUrl)
-                .putString(METADATA_KEY_MEDIA_URI, song.imageUrl)
+                .putString(METADATA_KEY_MEDIA_URI, song.songUrl)
                 .putString(METADATA_KEY_ALBUM_ART_URI, song.imageUrl)
                 .putString(METADATA_KEY_DISPLAY_SUBTITLE, song.subtitle)
                 .putString(METADATA_KEY_DISPLAY_DESCRIPTION, song.subtitle)

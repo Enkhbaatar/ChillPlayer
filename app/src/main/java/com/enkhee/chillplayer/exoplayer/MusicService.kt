@@ -128,7 +128,11 @@ class MusicService : MediaBrowserServiceCompat() {
                         result.sendResult(mFirebaseMusicSource.asMediaItems().toMutableList())
                         if (!isPlayerInitialized && mFirebaseMusicSource.isMusicSourceNotEmpty()) {
                             val songs = mFirebaseMusicSource.songs
-                            preparePlayer(songs, songs[FIRST_SONG_INDEX], false)
+                            mServiceScope.launch {
+                                withContext(Dispatchers.Main) {
+                                    preparePlayer(songs, songs[FIRST_SONG_INDEX], false)
+                                }
+                            }
                             isPlayerInitialized = true
                         }
                     } else {

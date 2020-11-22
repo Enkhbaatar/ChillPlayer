@@ -14,7 +14,7 @@ import com.enkhee.chillplayer.other.Event
 import com.enkhee.chillplayer.other.Resource
 
 class MusicServiceConnection(
-    private val context: Context
+    context: Context
 ) {
 
     private val _isConnected = MutableLiveData<Event<Resource<Boolean>>>()

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Song List item size-->
+    <dimen name="song_item_space">3dp</dimen>
     <dimen name="image_size">50dp</dimen>
-    <dimen name="image_margin">8dp</dimen>
+    <dimen name="image_margin">10dp</dimen>
+    <dimen name="current_song_image_size">56dp</dimen>
 </resources>
