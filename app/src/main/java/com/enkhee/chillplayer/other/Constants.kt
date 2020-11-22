@@ -12,4 +12,7 @@ object Constants {
     const val MEDIA_ROOT_ID = "root_id"
 
     const val NETWORK_ERROR = "NETWORK_ERROR"
+
+    /** Default error message */
+    const val UNKNOWN_ERROR_OCCURRED = "An unknown error occurred"
 }
