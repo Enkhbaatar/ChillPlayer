@@ -1,12 +1,11 @@
 package com.enkhee.chillplayer.adapters
 
-import android.view.View
 import androidx.recyclerview.widget.AsyncListDiffer
 import com.enkhee.chillplayer.R
 import com.enkhee.chillplayer.data.entities.Song
-import kotlinx.android.synthetic.main.list_item.view.*
+import kotlinx.android.synthetic.main.swipe_item.view.*
 
-class SwipeSongAdapter : BaseSongAdapter(R.layout.list_item) {
+class SwipeSongAdapter : BaseSongAdapter(R.layout.swipe_item) {
 
     override val differ: AsyncListDiffer<Song> = AsyncListDiffer(this, diffCallback)
 
@@ -14,9 +13,7 @@ class SwipeSongAdapter : BaseSongAdapter(R.layout.list_item) {
         val song = songs[position]
         holder.itemView.apply {
             val text = "${song.title} - ${song.subtitle}"
-            tvTitle.text = "${song.title} - ${song.subtitle}"
-            tvSubtitle.visibility = View.GONE
-            ivSongImage.visibility = View.GONE
+            songTitle.text = text
         }
     }
 }

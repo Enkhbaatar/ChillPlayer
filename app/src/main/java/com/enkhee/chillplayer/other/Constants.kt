@@ -7,6 +7,7 @@ object Constants {
 
     const val FIRST_SONG_INDEX = 0
     const val SONG_START_POSITION = 0L
+    const val INVALID_INDEX = -1
 
     const val MEDIA_ROOT_ID = "root_id"
 

@@ -5,4 +5,5 @@
     <dimen name="image_size">50dp</dimen>
     <dimen name="image_margin">10dp</dimen>
     <dimen name="current_song_image_size">56dp</dimen>
+    <dimen name="swipe_adapter_space">10dp</dimen>
 </resources>

@@ -22,7 +22,7 @@ class MainViewModel @ViewModelInject constructor(
 
     val isConnected = musicServiceConnection.isConnection
     val networkError = musicServiceConnection.networkError
-    private val curPlayingSong = musicServiceConnection.curPlayingSong
+    val curPlayingSong = musicServiceConnection.curPlayingSong
     private val playbackState = musicServiceConnection.playbackState
 
     init {

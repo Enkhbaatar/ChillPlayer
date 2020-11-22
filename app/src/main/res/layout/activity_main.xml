@@ -37,11 +37,14 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/songPager"
         android:layout_width="0dp"
         android:layout_height="@dimen/current_song_image_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/currentSongImage"
-        app:layout_constraintEnd_toStartOf="@id/ivPlayPause"/>
+        app:layout_constraintEnd_toStartOf="@id/ivPlayPause"
+        android:layout_marginStart="@dimen/swipe_adapter_space"
+        android:layout_marginEnd="@dimen/swipe_adapter_space"/>
 
     <ImageView
         android:id="@+id/ivPlayPause"
