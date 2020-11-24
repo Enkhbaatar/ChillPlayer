@@ -14,6 +14,7 @@ class SwipeSongAdapter : BaseSongAdapter(R.layout.swipe_item) {
         holder.itemView.apply {
             val text = "${song.title} - ${song.subtitle}"
             songTitle.text = text
+            setOnClickListener { onSongItemClickListener?.let { click -> click(song) } }
         }
     }
 }

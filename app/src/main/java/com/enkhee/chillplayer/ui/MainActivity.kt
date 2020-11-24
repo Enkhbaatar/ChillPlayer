@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.RequestManager
 import com.enkhee.chillplayer.R
@@ -22,10 +25,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var glide: RequestManager
-    @Inject
-    lateinit var swipeSongAdapter: SwipeSongAdapter
+    @Inject lateinit var glide: RequestManager
+    @Inject lateinit var swipeSongAdapter: SwipeSongAdapter
 
     private val mainViewModel: MainViewModel by viewModels()
     private var currentPlayingSong: Song? = null
@@ -38,6 +39,38 @@ class MainActivity : AppCompatActivity() {
         setPlayPauseListener()
         setSwipeListener()
         songPager.adapter = swipeSongAdapter
+        navControllerListener()
+        setSwipeSongAdapterClickListener()
+    }
+
+    private fun navControllerListener() {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
+        navHostFragment.findNavController().addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.songFragment -> hideBottomBar()
+                R.id.homeFragment -> showBottomBar()
+                else -> showBottomBar()
+            }
+        }
+    }
+
+    private fun setSwipeSongAdapterClickListener(){
+        swipeSongAdapter.setOnItemClickListener {
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
+            navHostFragment.findNavController().navigate(R.id.globalActionYoSongFragment)
+        }
+    }
+
+    private fun hideBottomBar() {
+        currentSongImage.isVisible = false
+        ivPlayPause.isVisible = false
+        songPager.isVisible = false
+    }
+
+    private fun showBottomBar() {
+        currentSongImage.isVisible = true
+        ivPlayPause.isVisible = true
+        songPager.isVisible = true
     }
 
     private fun switchViewPagerToCurrentSong(song: Song) {
@@ -78,7 +111,7 @@ class MainActivity : AppCompatActivity() {
                             if (songs.isNotEmpty()) {
                                 val imageUrl = (currentPlayingSong
                                     ?: songs[Constants.FIRST_SONG_INDEX]).imageUrl
-                                //glide.load(imageUrl).into(currentSongImage)
+                                glide.load(imageUrl).into(currentSongImage)
                             }
                             switchViewPagerToCurrentSong(currentPlayingSong ?: return@observe)
                         }
