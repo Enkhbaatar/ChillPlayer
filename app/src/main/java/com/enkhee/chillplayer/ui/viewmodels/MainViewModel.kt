@@ -58,7 +58,7 @@ class MainViewModel @ViewModelInject constructor(
         musicServiceConnection.transportControls.skipToPrevious()
     }
 
-    fun skipTo(position: Long) {
+    fun seekTo(position: Long) {
         musicServiceConnection.transportControls.seekTo(position)
     }
 
